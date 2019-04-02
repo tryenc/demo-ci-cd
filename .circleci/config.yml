@@ -1,7 +1,13 @@
 version: 2.1
 orbs:
-  aws-s3: circleci/aws-s3@1.0.4
 jobs:
+  build:
+    docker:
+      - image: circleci/python:2.7-node
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run build
   test:
     docker:
       - image: circleci/python:2.7-node
@@ -11,6 +17,12 @@ jobs:
       - run: npm run test
 workflows:
   version: 2.1
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
   test:
     jobs:
       - test
